@@ -3,6 +3,9 @@ package com.main.controller;
 import com.main.dto.EmployeeRequest;
 import com.main.dto.EmployeeResponse;
 import com.main.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,11 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
+@Tag(name = "Employees", description = "Create, read, update, delete, and list employees")
+@SecurityRequirement(name = "bearerAuth")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
 
     @PostMapping
+    @Operation(summary = "Create a new employee")
     public ResponseEntity<EmployeeResponse> createEmployee(
             @Valid @RequestBody EmployeeRequest request) {
 
@@ -26,6 +32,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get an employee by id")
     public ResponseEntity<EmployeeResponse> getEmployeeById(
             @PathVariable Long id) {
 
@@ -34,6 +41,7 @@ public class EmployeeController {
     }
 
     @GetMapping
+    @Operation(summary = "List employees with pagination and sorting")
     public ResponseEntity<Page<EmployeeResponse>> getAllEmployees(
 
             @RequestParam(defaultValue = "0") int page,
@@ -51,6 +59,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update an employee by id")
     public ResponseEntity<EmployeeResponse> updateEmployee(
 
             @PathVariable Long id,
@@ -64,6 +73,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete an employee by id")
     public ResponseEntity<String> deleteEmployee(
             @PathVariable Long id) {
 
